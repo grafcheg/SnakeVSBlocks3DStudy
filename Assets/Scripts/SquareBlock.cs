@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -5,6 +6,8 @@ using UnityEngine.Events;
 
 public class SquareBlock : MonoBehaviour, IHittable
 {
+    public Color colorMaxHP = Color.red;
+    public Color colorMinHP = Color.green;
     public TMP_Text lengthText;
     
     [field: SerializeField]
@@ -16,12 +19,21 @@ public class SquareBlock : MonoBehaviour, IHittable
 
     private bool _waitBeforeNextAttack;
     private bool _dead = false;
+    private int _maxHealth = 15;
+    private Renderer _renderer;
 
     private void Start()
     {
         lengthText.SetText(Health.ToString());
+        _renderer = GetComponentInChildren<Renderer>();
     }
-    
+
+    private void Update()
+    {
+        float t = Mathf.InverseLerp(_maxHealth, 1f, Health);
+        _renderer.material.color = Color.Lerp(colorMaxHP, colorMinHP,  t);
+    }
+
     private void OnCollisionStay(Collision collisionInfo)
     {
         if (!collisionInfo.collider.gameObject.CompareTag("Player")) return;

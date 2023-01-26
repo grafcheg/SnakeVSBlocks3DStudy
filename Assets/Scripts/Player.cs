@@ -3,6 +3,8 @@ using UnityEngine.Events;
 
 public class Player : MonoBehaviour, IHittable
 {
+    public GameManager gameManager;
+
     [field: SerializeField]
     public int Health { get; set; } = 1;
     [field: SerializeField]
@@ -38,5 +40,12 @@ public class Player : MonoBehaviour, IHittable
     public void Die()
     {
         Destroy(gameObject);
+        gameManager.OnPlayerDeath();
+    }
+
+    public void FinishLevel()
+    {
+        Destroy(gameObject);
+        gameManager.OnFinish();
     }
 }
